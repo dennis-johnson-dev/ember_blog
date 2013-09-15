@@ -1,6 +1,18 @@
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/angular_express');
+var mongoUri = process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL || 
+  'mongodb://localhost/angular_express';
+
+
+mongoose.connect(mongoUri, function (err, res) {
+  if (err) {
+    console.log('Error connect to: ' + mongoUri + '. ' + err);
+  } else {
+    console.log('Succeeded and connected to: ' + mongoUri);
+  }
+});
+
 var schema = new mongoose.Schema({
   title: String,
   text: String 
