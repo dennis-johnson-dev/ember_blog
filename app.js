@@ -1,3 +1,4 @@
+// app.js
 
 /**
  * Module dependencies
@@ -11,13 +12,12 @@ var express = require('express'),
 
 var app = module.exports = express();
 
-
 /**
  * Configuration
  */
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3011);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.logger('dev'));
@@ -41,20 +41,19 @@ if (app.get('env') === 'production') {
  * Routes
  */
 
-// serve index and view partials
 app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
 
 // JSON API
-app.get('/api/name', api.name);
 
-// redirect all others to the index (HTML5 history)
-app.get('*', routes.index);
+app.get('/api/posts', api.posts);
 
+app.get('/api/post/:id', api.post);
+app.post('/api/post', api.addPost);
+app.put('/api/post/:id', api.editPost);
+app.delete('/api/post/:id', api.deletePost);
 
-/**
- * Start Server
- */
+/** Start Server */
 
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
