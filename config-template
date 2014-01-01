@@ -1,0 +1,8 @@
+yourdatabaselocation
+
+/*
+ * rename this to config and delete this before use
+ * E.G.
+ * mongodb://localhost/databaselocation
+ */
+

@@ -46,13 +46,14 @@ exports.deletePost = function(req, res) {
 exports.addPost = function(req, res) {
   // New save to database statement
   Post.create({
-    title: req.body.title,
-    text: req.body.text 
+    title: req.body.post.title,
+    text: req.body.post.text 
   }, function(err) {
     if (err) return next(err);
+
+    console.log('added');
     res.send(200);
   });  
-  console.log('added');
 };
 
 

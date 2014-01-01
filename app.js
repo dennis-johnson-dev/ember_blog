@@ -5,7 +5,6 @@
  */
 
 var express = require('express'),
-  routes = require('./routes'),
   api = require('./routes/api'),
   http = require('http'),
   path = require('path');
@@ -19,7 +18,9 @@ var app = module.exports = express();
 // all environments
 app.set('port', process.env.PORT || 3011);
 app.set('views', __dirname + '/views');
+/*
 app.set('view engine', 'jade');
+*/
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -41,15 +42,12 @@ if (app.get('env') === 'production') {
  * Routes
  */
 
-app.get('/', routes.index);
-app.get('/partials/:name', routes.partials);
-
 // JSON API
 
 app.get('/api/posts', api.posts);
-
 app.get('/api/post/:id', api.post);
 app.post('/api/post', api.addPost);
+app.post('/api/posts', api.addPost);
 app.put('/api/post/:id', api.editPost);
 app.delete('/api/post/:id', api.deletePost);
 

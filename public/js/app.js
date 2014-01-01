@@ -1,39 +1,59 @@
-'use strict';
+window.App = Ember.Application.create();
 
-// Declare app level module which depends on filters, and services
+App.Store = DS.Store.extend({
+  revision: 11
+});
 
-angular.module('myApp', [
-  'myApp.filters',
-  'myApp.services',
-  'myApp.directives'
-]).
-config(['$routeProvider', '$locationProvider', function($routeProvider, 
-$locationProvider) {
-  $routeProvider.
-    when('/', {
-      templateUrl: 'partials/index',
-      controller: 'IndexCtrl'
-    }).
-    when('/addPost', {
-      templateUrl: 'partials/addPost',
-      controller: 'AddPostCtrl'
-    }).
-    when('/readPost/:id', {
-      templateUrl: 'partials/readPost',
-      controller: 'ReadPostCtrl'
-    }).
-    when('/editPost/:id', {
-      templateUrl: 'partials/editPost',
-      controller: 'EditPostCtrl'
-    }).
-    when('/deletePost/:id', {
-      templateUrl: 'partials/deletePost',
-      controller: 'DeletePostCtrl'
-    }).
-    otherwise({
-      redirectTo: '/'
-    });
+App.ApplicationAdapter = DS.RESTAdapter.extend({
+  namespace: 'api'
+});
 
-  $locationProvider.html5Mode(true);
-}]);
+App.Router.map(function() {
+  this.resource('posts', function() {
+  });
+});
 
+App.PostsRoute = Ember.Route.extend({
+  model: function() {
+    return this.store.find('post');
+  }
+});
+
+App.PostsIndexRoute = Ember.Route.extend({
+  setupController: function() {
+    this.controllerFor('posts').set('posts_var', this.modelFor('posts'));
+  }
+});
+
+/* Models */
+App.Post = DS.Model.extend({
+  title: DS.attr('string'),
+  text: DS.attr('string')
+});
+
+App.ApplicationSerializer = DS.RESTSerializer.extend({
+  primaryKey: function(type){
+    return '_id';
+  }.property()
+});
+
+App.PostsController = Ember.ArrayController.extend({
+  actions: {
+    createPost: function() {
+      if (this.get('title') != undefined && this.get('text') != undefined) {
+        var title, text;
+        title = this.get('title').trim();
+        text = this.get('text').trim();
+
+        var post = this.store.createRecord('post', {
+          title: title,
+          text: text
+        });
+        post.save();
+      }
+      else {
+        console.log('fields not filled in');
+      }
+    }
+  }
+});
