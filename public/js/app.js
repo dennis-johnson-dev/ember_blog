@@ -31,12 +31,15 @@ App.Router.map(function() {
 App.PostsRoute = Ember.Route.extend({
   model: function() {
     return this.store.find('post');
-  }
-
+  }, 
+  
+  setupController: function(controller, model) {
+    controller.set('model', model);
+  } 
 });
 
 App.NewPostRoute = Ember.Route.extend({
-  setupController: function(controller){
+  setupController: function(controller, model){
     controller.newRecord();
   }
 });
@@ -46,6 +49,9 @@ App.PostsController = Ember.ArrayController.extend({
 });
 
 App.NewPostController = Ember.ObjectController.extend({
+  title: null,
+  text: null,
+
   actions: {
     createPost: function() {
       if (!(this.get('title') == undefined || this.get('text') == undefined)){
@@ -62,8 +68,8 @@ App.NewPostController = Ember.ObjectController.extend({
         this.set('title', '');
         this.set('text', '');
 
-        post.save();
         this.transitionToRoute('posts');
+        post.save();
       }
       else {
         console.log('fields not filled in');
