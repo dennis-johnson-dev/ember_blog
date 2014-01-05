@@ -12,21 +12,41 @@
   <script type="text/x-handlebars">
     <h1>Yo yo yo!</h1>
 
+    {{#link-to 'index'}}Home{{/link-to}}
+    {{#link-to 'posts'}}Posts{{/link-to}}
     {{outlet}}
   </script>
 
-  <script type="text/x-handlebars" data-template-name="posts">
+  <script id="posts" type="text/x-handlebars" data-template-name="posts">
     <h1>Hi!</h1>
-    
-    {{input id="new_post" type="text" value=title placeholder="juice"}}
-    {{textarea value=text cols="80" rows="60" placeholder="bomb"}} 
 
-    <button {{action "createPost"}}>Create</button>
-    {{#each controller}}
-      <h3>{{title}}</h3>
-      <p>{{text}}</p>
+    {{#link-to 'newPost'}}New Post{{/link-to}}
+    
+    {{#each model}}
+        <h3>{{#link-to 'post' this}}{{title}}{{/link-to}}</h3>
+        <p>{{text}}</p>
     {{/each}}
 
+    {{outlet}}
+
+  </script>
+
+  <script id="post" type="text/x-handlebars" data-template-name="post">
+    <h1>{{title}}</h1>
+    <p>{{text}}</p>
+  </script>
+
+  <script id="newPost" type="text/x-handlebars" data-template-name="newPost">
+    <h1>New Post</h1>
+    <p>
+      {{input type="text" value=title placeholder="juice"}}
+    </p>
+    <p>
+      {{textarea value=text cols="80" rows="60" placeholder="bomb"}} 
+    </p>
+    <p>
+      <button {{action "createPost"}}>Create</button>
+    </p>
   </script>
 
   <script src="js/libs/jquery.js"></script>
