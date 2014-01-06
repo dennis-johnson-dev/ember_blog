@@ -33,14 +33,18 @@ App.PostsRoute = Ember.Route.extend({
     return this.store.find('post');
   }, 
   
-  setupController: function(controller, model) {
-    controller.set('model', model);
+  setupController: function() {
+    var posts = this.store.filter('post', function (post) {
+      return !post.get('isDirty');
+    });
+  
+    this.controllerFor('posts').set('model', posts);
   } 
 });
 
 App.NewPostRoute = Ember.Route.extend({
-  setupController: function(controller, model){
-    controller.newRecord();
+  model: function() {
+    return this.store.createRecord('post');
   }
 });
 
@@ -56,7 +60,7 @@ App.NewPostController = Ember.ObjectController.extend({
     createPost: function() {
       if (!(this.get('title') == undefined || this.get('text') == undefined)){
         var title, text;
-
+    
         title = this.get('title').trim();
         text = this.get('text').trim();
 

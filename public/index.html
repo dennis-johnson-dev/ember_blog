@@ -22,13 +22,12 @@
 
     {{#link-to 'newPost'}}New Post{{/link-to}}
     
-    {{outlet}}
-
     {{#each model}}
         <h3>{{#link-to 'post' this}}{{title}}{{/link-to}}</h3>
         <p>{{text}}</p>
     {{/each}}
 
+    {{outlet}}
 
   </script>
 
